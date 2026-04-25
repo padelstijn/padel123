@@ -1,0 +1,9 @@
+{
+  "PADEL_AI_ENGINE_CORE": {
+    "version": "v8",
+    "mode": "coach_ai",
+    "data_layer": "datalayer.json",
+    "skill_layer": "padelslagen.json",
+    "lesson_engine": "active"
+  }
+}
