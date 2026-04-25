@@ -1,0 +1,14 @@
+{
+  "les": 1,
+  "niveau": "beginner",
+  "focus": "voorkant spel (forehand)",
+  "slagen": ["forehand basic"],
+  "doel": "balcontrole en basis techniek",
+  "opbouw": {
+    "warming_up": "...",
+    "techniek": "...",
+    "oefening": "...",
+    "spelvorm": "..."
+  },
+  "progressie": "volgende les introduceert volley"
+}
