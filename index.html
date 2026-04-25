@@ -1,72 +1,71 @@
-```html
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Padel123 Trainer Tool</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Padel123 Trainer Tool</title>
 
-    <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            background: #f5f5f5;
-        }
+<style>
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background: #f5f5f5;
+}
 
-        h1 {
-            margin-bottom: 10px;
-        }
+h1 {
+    margin-bottom: 10px;
+}
 
-        #tabs {
-            margin-bottom: 15px;
-        }
+#tabs {
+    margin-bottom: 15px;
+}
 
-        #tabs button {
-            margin: 3px;
-            padding: 8px 12px;
-            cursor: pointer;
-            border: none;
-            background: #ddd;
-            border-radius: 6px;
-        }
+#tabs button {
+    margin: 3px;
+    padding: 8px 12px;
+    cursor: pointer;
+    border: none;
+    background: #ddd;
+    border-radius: 6px;
+}
 
-        #tabs button:hover {
-            background: #bbb;
-        }
+#tabs button:hover {
+    background: #bbb;
+}
 
-        .controls {
-            margin-bottom: 20px;
-        }
+.controls {
+    margin-bottom: 20px;
+}
 
-        .controls button {
-            margin-right: 10px;
-            padding: 8px 12px;
-            cursor: pointer;
-        }
+.controls button {
+    margin-right: 10px;
+    padding: 8px 12px;
+    cursor: pointer;
+}
 
-        #form {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            max-width: 900px;
-        }
+#form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    max-width: 1000px;
+}
 
-        .field {
-            display: flex;
-            flex-direction: column;
-        }
+.field {
+    display: flex;
+    flex-direction: column;
+}
 
-        input, textarea {
-            padding: 6px;
-            font-size: 14px;
-        }
+input, textarea, select {
+    padding: 6px;
+    font-size: 14px;
+}
 
-        textarea {
-            min-height: 80px;
-        }
-    </style>
+textarea {
+    min-height: 80px;
+}
+</style>
 </head>
 
 <body>
@@ -80,121 +79,38 @@
 <div class="controls">
     <button onclick="saveLesson()">💾 Opslaan</button>
     <button onclick="exportLesson()">⬇ Export .txt</button>
-    <input type="file" id="fileInput" onchange="importLesson(event)">
+    <input type="file" onchange="importLesson(event)">
 </div>
 
-<!-- Form -->
+<!-- Slagen selector -->
+<div class="controls">
+    <label>🎾 Slag:</label>
+    <select id="slagSelect" onchange="fillSlagData()"></select>
+    <button onclick="loadSlagen()">🔄 Slagen laden</button>
+</div>
+
+<!-- FORM -->
 <div id="form">
 
-    <div class="field">
-        <label>Trainer</label>
-        <input id="Trainer">
-    </div>
+<div class="field"><label>Trainer</label><input id="Trainer"></div>
+<div class="field"><label>Datum</label><input id="Datum"></div>
+<div class="field"><label>Niveau</label><input id="Niveau"></div>
 
-    <div class="field">
-        <label>Datum</label>
-        <input id="Datum">
-    </div>
+<div class="field"><label>Speler 1</label><input id="Spelers_profiel1"></div>
+<div class="field"><label>Speler 2</label><input id="Spelers_profiel2"></div>
+<div class="field"><label>Speler 3</label><input id="Spelers_profiel3"></div>
+<div class="field"><label>Speler 4</label><input id="Spelers_profiel4"></div>
 
-    <div class="field">
-        <label>Lesweek</label>
-        <input id="Lesweek">
-    </div>
+<div class="field"><label>Groep</label><textarea id="Spelers_groep"></textarea></div>
 
-    <div class="field">
-        <label>Tijd</label>
-        <input id="Tijd">
-    </div>
+<div class="field"><label>Slag</label><input id="Slag"></div>
+<div class="field"><label>Bedoeling</label><input id="Bedoeling"></div>
 
-    <div class="field">
-        <label>Lesduur</label>
-        <input id="Lesduur">
-    </div>
-
-    <div class="field">
-        <label>Locatie</label>
-        <input id="Locatie">
-    </div>
-
-    <div class="field">
-        <label>Lesgroep</label>
-        <input id="Lesgroep">
-    </div>
-
-    <div class="field">
-        <label>Niveau</label>
-        <input id="Niveau">
-    </div>
-
-    <div class="field">
-        <label>Spelers groep</label>
-        <textarea id="Spelers_groep"></textarea>
-    </div>
-
-    <div class="field">
-        <label>Speler 1</label>
-        <input id="Spelers_profiel1">
-    </div>
-
-    <div class="field">
-        <label>Speler 2</label>
-        <input id="Spelers_profiel2">
-    </div>
-
-    <div class="field">
-        <label>Speler 3</label>
-        <input id="Spelers_profiel3">
-    </div>
-
-    <div class="field">
-        <label>Speler 4</label>
-        <input id="Spelers_profiel4">
-    </div>
-
-    <div class="field">
-        <label>Hoofdspelsituatie</label>
-        <input id="Hoofdspelsituatie">
-    </div>
-
-    <div class="field">
-        <label>Bedoeling</label>
-        <input id="Bedoeling">
-    </div>
-
-    <div class="field">
-        <label>Slag</label>
-        <input id="Slag">
-    </div>
-
-    <div class="field">
-        <label>Niveaubepalende factor</label>
-        <input id="Niveaubepalende_factor">
-    </div>
-
-    <div class="field">
-        <label>Kern A doel</label>
-        <textarea id="KernA_doel"></textarea>
-    </div>
-
-    <div class="field">
-        <label>Kern B doel</label>
-        <textarea id="KernB_doel"></textarea>
-    </div>
-
-    <div class="field">
-        <label>Evaluatie</label>
-        <textarea id="Evaluatie"></textarea>
-    </div>
-
-    <div class="field">
-        <label>Notities trainer</label>
-        <textarea id="Notities_trainer"></textarea>
-    </div>
+<div class="field"><label>Kern A</label><textarea id="KernA_doel"></textarea></div>
+<div class="field"><label>Kern B</label><textarea id="KernB_doel"></textarea></div>
 
 </div>
 
 <script src="app.js"></script>
-
 </body>
 </html>
-```
