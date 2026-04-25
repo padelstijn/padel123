@@ -1,4 +1,12 @@
 {
+  {
+  "rules": {
+    "beginner": ["forehand","backhand"],
+    "intermediate": ["volley_forehand","volley_backhand"],
+    "advanced": ["bandeja","vibora","smash"]
+  },
+  "logic": "select_slag_based_on_zwaktes_and_spelsituatie"
+}
   "les": 1,
   "niveau": "beginner",
   "focus": "voorkant spel (forehand)",
