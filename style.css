@@ -1,0 +1,31 @@
+body {
+    font-family: Arial;
+    margin: 20px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+textarea {
+    height: 80px;
+}
+
+input, textarea {
+    padding: 8px;
+    width: 100%;
+}
+
+.buttons {
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px;
+    margin-right: 10px;
+    background: black;
+    color: white;
+    border: none;
+}
