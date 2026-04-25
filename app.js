@@ -1,52 +1,75 @@
-function genereerProfiel() {
+const TOTAL_LESSONS = 12;
+let currentLesson = 1;
 
-    let spelers = [
-        document.getElementById("speler1").value,
-        document.getElementById("speler2").value,
-        document.getElementById("speler3").value,
-        document.getElementById("speler4").value
-    ].filter(s => s !== "");
+// Alle velden (breid uit naar jouw 44!)
+const fields = [
+    "Trainer","Datum","Niveau",
+    "Spelers_profiel1","Spelers_profiel2","Spelers_profiel3","Spelers_profiel4",
+    "Spelers_groep"
+];
 
-    let profiel = "";
-
-    profiel += "Groep van " + spelers.length + " spelers.\n\n";
-
-    if (spelers.length <= 2) {
-        profiel += "Veel individuele aandacht mogelijk.\n";
-    } else {
-        profiel += "Groepsdynamiek en rotatie belangrijk.\n";
+// Tabs maken
+function initTabs() {
+    const tabsDiv = document.getElementById("tabs");
+    for (let i = 1; i <= TOTAL_LESSONS; i++) {
+        let btn = document.createElement("button");
+        btn.innerText = "Les " + i;
+        btn.onclick = () => switchLesson(i);
+        tabsDiv.appendChild(btn);
     }
-
-    profiel += "\nTechnisch:\n- Inconsistent raakpunt\n- Timing problemen\n";
-
-    profiel += "\nTactisch:\n- Weinig bewuste keuzes\n- Spelen reactief\n";
-
-    profiel += "\nFocus training:\n- Richting\n- Controle\n- Keuze maken\n";
-
-    document.getElementById("groep").value = profiel;
 }
 
-function opslaan() {
+// Wissel van les
+function switchLesson(nr) {
+    saveLesson();
+    currentLesson = nr;
+    loadLesson();
+}
+
+// Opslaan (localStorage)
+function saveLesson() {
     let data = {};
-
-    document.querySelectorAll("input, textarea").forEach(el => {
-        data[el.id] = el.value;
+    fields.forEach(f => {
+        data[f] = document.getElementById(f).value;
     });
-
-    localStorage.setItem("lesData", JSON.stringify(data));
-    alert("Opgeslagen!");
+    localStorage.setItem("les_" + currentLesson, JSON.stringify(data));
 }
 
-function laden() {
-    let data = JSON.parse(localStorage.getItem("lesData"));
-
-    if (!data) return;
-
-    Object.keys(data).forEach(key => {
-        if (document.getElementById(key)) {
-            document.getElementById(key).value = data[key];
-        }
+// Laden
+function loadLesson() {
+    let data = JSON.parse(localStorage.getItem("les_" + currentLesson));
+    fields.forEach(f => {
+        document.getElementById(f).value = data ? (data[f] || "") : "";
     });
-
-    alert("Geladen!");
 }
+
+// Export .txt
+function exportLesson() {
+    saveLesson();
+
+    let data = localStorage.getItem("les_" + currentLesson);
+    let blob = new Blob([data], { type: "text/plain" });
+
+    let a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `les_${currentLesson}.txt`;
+    a.click();
+}
+
+// Import .txt
+function importLesson(event) {
+    let file = event.target.files[0];
+    if (!file) return;
+
+    let reader = new FileReader();
+    reader.onload = function(e) {
+        let data = JSON.parse(e.target.result);
+        localStorage.setItem("les_" + currentLesson, JSON.stringify(data));
+        loadLesson();
+    };
+    reader.readAsText(file);
+}
+
+// Start
+initTabs();
+loadLesson();
