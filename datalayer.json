@@ -1,151 +1,21 @@
 {
-  "meta": {
-    "version": "3.0",
-    "type": "padel_ai_datalayer"
-  },
-
   "global": {
     "Trainer": "",
     "Lesgroep": "",
-    "Niveau": "",
-    "Lesduur": "",
-    "Locatie": "",
-    "Spelers_groep": "",
-    "Spelers_profiel1": "",
-    "Spelers_profiel2": "",
-    "Spelers_profiel3": "",
-    "Spelers_profiel4": ""
+    "Lesduur": ""
   },
-
-  "defaults": {
-    "Beginsituatie_algemeen": "",
-    "Technische_zwaktes": "",
-    "Tactische_zwaktes": "",
-    "Verwachting_spel": "",
-    "Hoofdspelsituatie": "",
-    "Bedoeling": "",
-    "Slag": "",
-    "Niveaubepalende_factor": "",
-    "KernA_doel": "",
-    "KernA_succescriteria": "",
-    "KernB_doel": "",
-    "KernB_beslissingsregels": "",
-    "Inleiding_doel": "",
-    "Inleiding_oefenvorm": "",
-    "Inleiding_coaching": "",
-    "KernA1_doel": "",
-    "KernA1_oefenvorm": "",
-    "KernA1_coaching": "",
-    "KernA2_doel": "",
-    "KernA2_oefenvorm": "",
-    "KernA2_coaching": "",
-    "KernB_doel_uitwerking": "",
-    "KernB_oefenvorm": "",
-    "KernB_coaching": "",
-    "Slot_spelvorm": "",
-    "Slot_regels": "",
-    "Evaluatie": "",
-    "Differentiatie": "",
-    "Materiaal": "",
-    "Notities_trainer": ""
-  },
-
-  "lessons": [
-    {
-      "id": 1,
-      "Datum": "",
-      "Lesweek": 1,
-      "Tijd": "09:00",
-      "AI_output": "",
-      "Slagen_AI": ["forehand"]
-    },
-    {
-      "id": 2,
-      "Datum": "",
-      "Lesweek": 2,
-      "Tijd": "09:00",
-      "AI_output": "",
-      "Slagen_AI": []
-    },
-    {
-      "id": 3,
-      "Datum": "",
-      "Lesweek": 3,
-      "Tijd": "09:00",
-      "AI_output": "",
-      "Slagen_AI": []
-    },
-    {
-      "id": 4,
-      "Datum": "",
-      "Lesweek": 4,
-      "Tijd": "09:00",
-      "AI_output": "",
-      "Slagen_AI": []
-    },
-    {
-      "id": 5,
-      "Datum": "",
-      "Lesweek": 5,
-      "Tijd": "09:00",
-      "AI_output": "",
-      "Slagen_AI": []
-    },
-    {
-      "id": 6,
-      "Datum": "",
-      "Lesweek": 6,
-      "Tijd": "09:00",
-      "AI_output": "",
-      "Slagen_AI": []
-    },
-    {
-      "id": 7,
-      "Datum": "",
-      "Lesweek": 7,
-      "Tijd": "09:00",
-      "AI_output": "",
-      "Slagen_AI": []
-    },
-    {
-      "id": 8,
-      "Datum": "",
-      "Lesweek": 8,
-      "Tijd": "09:00",
-      "AI_output": "",
-      "Slagen_AI": []
-    },
-    {
-      "id": 9,
-      "Datum": "",
-      "Lesweek": 9,
-      "Tijd": "09:00",
-      "AI_output": "",
-      "Slagen_AI": []
-    },
-    {
-      "id": 10,
-      "Datum": "",
-      "Lesweek": 10,
-      "Tijd": "09:00",
-      "AI_output": "",
-      "Slagen_AI": []
-    },
-    {
-      "id": 11,
-      "Datum": "",
-      "Lesweek": 11,
-      "Tijd": "09:00",
-      "AI_output": "",
-      "Slagen_AI": []
-    },
-    {
-      "id": 12,
-      "Datum": "",
-      "Lesweek": 12,
-      "Tijd": "09:00",
-      "AI_output": "",
-      "Slagen_AI": []
-    }
+  "lessen": [
+    { "id": 1 },
+    { "id": 2 },
+    { "id": 3 },
+    { "id": 4 },
+    { "id": 5 },
+    { "id": 6 },
+    { "id": 7 },
+    { "id": 8 },
+    { "id": 9 },
+    { "id": 10 },
+    { "id": 11 },
+    { "id": 12 }
   ]
 }
