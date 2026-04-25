@@ -1,18 +1,23 @@
 {
   "meta": {
-    "versie": "3.0",
-    "lessen_totaal": 12
+    "version": "3.0",
+    "type": "padel_ai_datalayer"
   },
-  "template": {
+
+  "global": {
     "Trainer": "",
-    "Datum": "",
-    "Lesweek": "",
-    "Tijd": "",
-    "Lesduur": "",
-    "Locatie": "",
     "Lesgroep": "",
     "Niveau": "",
-    "Spelers_profiel": "",
+    "Lesduur": "",
+    "Locatie": "",
+    "Spelers_groep": "",
+    "Spelers_profiel1": "",
+    "Spelers_profiel2": "",
+    "Spelers_profiel3": "",
+    "Spelers_profiel4": ""
+  },
+
+  "defaults": {
     "Beginsituatie_algemeen": "",
     "Technische_zwaktes": "",
     "Tactische_zwaktes": "",
@@ -42,12 +47,105 @@
     "Evaluatie": "",
     "Differentiatie": "",
     "Materiaal": "",
-    "Notities_trainer": "",
-    "Spelers_groep": "",
-    "Spelers_profiel1": "",
-    "Spelers_profiel2": "",
-    "Spelers_profiel3": "",
-    "Spelers_profiel4": ""
+    "Notities_trainer": ""
   },
-  "lessen": []
+
+  "lessons": [
+    {
+      "id": 1,
+      "Datum": "",
+      "Lesweek": 1,
+      "Tijd": "09:00",
+      "AI_output": "",
+      "Slagen_AI": ["forehand"]
+    },
+    {
+      "id": 2,
+      "Datum": "",
+      "Lesweek": 2,
+      "Tijd": "09:00",
+      "AI_output": "",
+      "Slagen_AI": []
+    },
+    {
+      "id": 3,
+      "Datum": "",
+      "Lesweek": 3,
+      "Tijd": "09:00",
+      "AI_output": "",
+      "Slagen_AI": []
+    },
+    {
+      "id": 4,
+      "Datum": "",
+      "Lesweek": 4,
+      "Tijd": "09:00",
+      "AI_output": "",
+      "Slagen_AI": []
+    },
+    {
+      "id": 5,
+      "Datum": "",
+      "Lesweek": 5,
+      "Tijd": "09:00",
+      "AI_output": "",
+      "Slagen_AI": []
+    },
+    {
+      "id": 6,
+      "Datum": "",
+      "Lesweek": 6,
+      "Tijd": "09:00",
+      "AI_output": "",
+      "Slagen_AI": []
+    },
+    {
+      "id": 7,
+      "Datum": "",
+      "Lesweek": 7,
+      "Tijd": "09:00",
+      "AI_output": "",
+      "Slagen_AI": []
+    },
+    {
+      "id": 8,
+      "Datum": "",
+      "Lesweek": 8,
+      "Tijd": "09:00",
+      "AI_output": "",
+      "Slagen_AI": []
+    },
+    {
+      "id": 9,
+      "Datum": "",
+      "Lesweek": 9,
+      "Tijd": "09:00",
+      "AI_output": "",
+      "Slagen_AI": []
+    },
+    {
+      "id": 10,
+      "Datum": "",
+      "Lesweek": 10,
+      "Tijd": "09:00",
+      "AI_output": "",
+      "Slagen_AI": []
+    },
+    {
+      "id": 11,
+      "Datum": "",
+      "Lesweek": 11,
+      "Tijd": "09:00",
+      "AI_output": "",
+      "Slagen_AI": []
+    },
+    {
+      "id": 12,
+      "Datum": "",
+      "Lesweek": 12,
+      "Tijd": "09:00",
+      "AI_output": "",
+      "Slagen_AI": []
+    }
+  ]
 }
