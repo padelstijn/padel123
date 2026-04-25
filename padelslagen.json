@@ -1,20 +1,75 @@
 {
-  "forehand": {
-    "doel": "Controle en opbouw",
-    "tactiek": "achterlijn",
-    "techniek": "onder naar boven",
-    "cues": ["laag", "voor je raken", "gewicht naar voren"]
-  },
-  "backhand": {
-    "doel": "stabiliteit onder druk",
-    "tactiek": "defensief",
-    "techniek": "compact",
-    "cues": ["grip correct", "schouder draaien"]
-  },
-  "volley_forehand": {
-    "doel": "druk zetten aan net",
-    "tactiek": "afmaken punt",
-    "techniek": "kort blok",
-    "cues": ["racket voor lichaam", "compact"]
+  "skills": {
+    "forehand": {
+      "doel": "",
+      "tactiek": "",
+      "techniek": "",
+      "cues": [],
+      "fouten": [],
+      "oefeningen": [],
+      "coach_focus": "",
+      "druk_situatie": "",
+      "niveau": ""
+    },
+
+    "backhand": {
+      "doel": "",
+      "tactiek": "",
+      "techniek": "",
+      "cues": [],
+      "fouten": [],
+      "oefeningen": [],
+      "coach_focus": "",
+      "druk_situatie": "",
+      "niveau": ""
+    },
+
+    "volley_forehand": {
+      "doel": "",
+      "tactiek": "",
+      "techniek": "",
+      "cues": [],
+      "fouten": [],
+      "oefeningen": [],
+      "coach_focus": "",
+      "druk_situatie": "",
+      "niveau": ""
+    },
+
+    "volley_backhand": {
+      "doel": "",
+      "tactiek": "",
+      "techniek": "",
+      "cues": [],
+      "fouten": [],
+      "oefeningen": [],
+      "coach_focus": "",
+      "druk_situatie": "",
+      "niveau": ""
+    },
+
+    "bandeja": {
+      "doel": "",
+      "tactiek": "",
+      "techniek": "",
+      "cues": [],
+      "fouten": [],
+      "oefeningen": [],
+      "coach_focus": "",
+      "druk_situatie": "",
+      "niveau": ""
+    },
+
+    "smash": {
+      "doel": "",
+      "tactiek": "",
+      "techniek": "",
+      "cues": [],
+      "fouten": [],
+      "oefeningen": [],
+      "coach_focus": "",
+      "druk_situatie": "",
+      "niveau": ""
+    }
   }
 }
