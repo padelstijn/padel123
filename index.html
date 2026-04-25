@@ -2,35 +2,43 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>Padel Coach v5</title>
+  <title>PADEL123 V8 AI COACH</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>🎾 Padel Coach v5</h1>
+<header>
+  <h1>🎾 PADEL123 V8 AI COACH</h1>
+</header>
 
-<div id="topbar">
-  <button onclick="saveGlobal()">💾 Save Global</button>
-  <button onclick="exportJSON()">JSON</button>
-  <button onclick="exportCSV()">CSV</button>
-  <button onclick="exportTXT()">TXT</button>
-  <input type="file" onchange="importFile(event)">
-</div>
+<section class="grid">
 
-<div id="tabs"></div>
+  <div class="card">
+    <h2>🧠 AI Coach</h2>
+    <button onclick="whatTrainTomorrow()">Wat train ik morgen?</button>
+    <div id="aiOutput"></div>
+  </div>
 
-<div id="global">
-  <h2>Global Coach Settings</h2>
-  <input id="Trainer" placeholder="Trainer">
-  <input id="Lesgroep" placeholder="Lesgroep">
-  <input id="Lesduur" placeholder="Lesduur">
-</div>
+  <div class="card">
+    <h2>📅 12-week Planner</h2>
+    <button onclick="generatePlan()">Genereer plan</button>
+    <div id="planOutput"></div>
+  </div>
 
-<hr>
+  <div class="card">
+    <h2>🎯 Lesson Builder</h2>
+    <textarea id="lessonInput" placeholder="Plak les data (44 kolommen JSON)"></textarea>
+    <button onclick="saveLesson()">Opslaan les</button>
+  </div>
 
-<div id="form"></div>
+  <div class="card">
+    <h2>📊 Player Progress</h2>
+    <button onclick="loadPlayers()">Laad spelers</button>
+    <div id="playerOutput"></div>
+  </div>
 
-<script src="db.js"></script>
+</section>
+
 <script src="app.js"></script>
 
 </body>
