@@ -1,164 +1,259 @@
 const TOTAL_LESSONS = 12;
-let currentLesson = 1;
 
-// 44 kolommen
-const fields = {
-    global: [
-        "Trainer","Lesgroep","Niveau","Lesduur","Locatie"
-    ],
-    lesson: [
-        "Datum","Lesweek","Tijd",
-        "Spelers_groep",
-        "Spelers_profiel1","Spelers_profiel2","Spelers_profiel3","Spelers_profiel4",
-        "Beginsituatie_algemeen","Technische_zwaktes","Tactische_zwaktes",
-        "Hoofdspelsituatie","Bedoeling","Slag","Niveaubepalende_factor",
-        "KernA_doel","KernA_succescriteria",
-        "KernB_doel","KernB_beslissingsregels",
-        "Inleiding_doel","Inleiding_oefenvorm","Inleiding_coaching",
-        "KernA1_doel","KernA1_oefenvorm","KernA1_coaching",
-        "KernA2_doel","KernA2_oefenvorm","KernA2_coaching",
-        "KernB_doel_uitwerking","KernB_oefenvorm","KernB_coaching",
-        "Slot_spelvorm","Slot_regels",
-        "Evaluatie","Differentiatie",
-        "Materiaal","Notities_trainer"
-    ]
+let state = {
+    global: {},
+    defaults: {},
+    lessons: []
 };
 
-// -------------------- INIT --------------------
-initTabs();
-buildForm();
-loadLesson();
+let currentLesson = 1;
 
-// -------------------- TABS --------------------
-function initTabs(){
-    const el = document.getElementById("tabs");
-    for(let i=1;i<=TOTAL_LESSONS;i++){
-        let b=document.createElement("button");
-        b.innerText="Les "+i;
-        b.onclick=()=>switchLesson(i);
-        el.appendChild(b);
+/* =========================
+   INIT
+========================= */
+
+async function init() {
+    await loadDataLayer();
+    initTabs();
+    loadLesson(1);
+}
+
+/* =========================
+   LOAD DATALAYER
+========================= */
+
+async function loadDataLayer() {
+    try {
+        const res = await fetch("datalayer.json");
+        const data = await res.json();
+
+        state.global = data.global || {};
+        state.defaults = data.defaults || {};
+
+        state.lessons = data.lessons || generateEmptyLessons();
+
+    } catch (e) {
+        console.warn("No datalayer found, using fallback");
+        state.lessons = generateEmptyLessons();
     }
 }
 
-function switchLesson(n){
+function generateEmptyLessons() {
+    let arr = [];
+    for (let i = 1; i <= TOTAL_LESSONS; i++) {
+        arr.push({
+            id: i,
+            Datum: "",
+            Lesweek: i,
+            Tijd: "09:00",
+            AI_output: ""
+        });
+    }
+    return arr;
+}
+
+/* =========================
+   TABS
+========================= */
+
+function initTabs() {
+    const tabs = document.getElementById("tabs");
+    tabs.innerHTML = "";
+
+    for (let i = 1; i <= TOTAL_LESSONS; i++) {
+        let btn = document.createElement("button");
+        btn.innerText = "Les " + i;
+        btn.onclick = () => switchLesson(i);
+        tabs.appendChild(btn);
+    }
+}
+
+function switchLesson(id) {
     saveLesson();
-    currentLesson=n;
-    loadLesson();
+    currentLesson = id;
+    loadLesson(id);
 }
 
-// -------------------- FORM --------------------
-function buildForm(){
-    const form=document.getElementById("form");
+/* =========================
+   LOAD LESSON
+========================= */
 
-    let all=[...fields.global,...fields.lesson];
+function loadLesson(id) {
+    const lesson = state.lessons.find(l => l.id === id);
 
-    all.forEach(f=>{
-        let div=document.createElement("div");
-        div.innerHTML=`<label>${f}</label>
-        <textarea id="${f}"></textarea>`;
-        form.appendChild(div);
-    });
-}
+    if (!lesson) return;
 
-// -------------------- SAVE/LOAD --------------------
-function saveLesson(){
-    let data={};
+    // merge global + lesson + defaults
+    const merged = {
+        ...state.global,
+        ...state.defaults,
+        ...lesson
+    };
 
-    [...fields.global,...fields.lesson].forEach(f=>{
-        let el=document.getElementById(f);
-        if(el) data[f]=el.value;
-    });
-
-    localStorage.setItem("les_"+currentLesson,JSON.stringify(data));
-}
-
-function loadLesson(){
-    let data=JSON.parse(localStorage.getItem("les_"+currentLesson)||"{}");
-
-    [...fields.global,...fields.lesson].forEach(f=>{
-        let el=document.getElementById(f);
-        if(el) el.value=data[f]||"";
-    });
-}
-
-// -------------------- GLOBAL SAVE --------------------
-function saveGlobal(){
-    let g={};
-    fields.global.forEach(f=>{
-        g[f]=document.getElementById(f).value;
-    });
-    localStorage.setItem("global",JSON.stringify(g));
-}
-
-// -------------------- EXPORT --------------------
-function buildData(){
-    let global=JSON.parse(localStorage.getItem("global")||"{}");
-    let lessons={};
-
-    for(let i=1;i<=12;i++){
-        lessons[i]=JSON.parse(localStorage.getItem("les_"+i)||"{}");
+    for (let key in merged) {
+        let el = document.getElementById(key);
+        if (el) el.value = merged[key] || "";
     }
-
-    return {global,lessons};
 }
 
-function exportAll(){
+/* =========================
+   SAVE LESSON
+========================= */
+
+function saveLesson() {
+    let lesson = state.lessons.find(l => l.id === currentLesson);
+    if (!lesson) return;
+
+    document.querySelectorAll("#form input, #form textarea").forEach(el => {
+        lesson[el.id] = el.value;
+    });
+
+    localStorage.setItem("padel123_state", JSON.stringify(state));
+}
+
+/* =========================
+   AI ENGINE
+========================= */
+
+function runAI(lessonId) {
+    const lesson = state.lessons.find(l => l.id === lessonId);
+    if (!lesson) return;
+
+    let niveau = state.global.Niveau || "beginner";
+    let zwaktes = lesson.Technische_zwaktes || "";
+
+    let slagen = getSlagenByLevel(niveau);
+
+    let gekozenSlag = pickBestSlag(slagen, zwaktes);
+
+    lesson.Slag = gekozenSlag;
+
+    lesson.AI_output =
+        `AI: focus op ${gekozenSlag} voor niveau ${niveau}. ` +
+        `Gebaseerd op zwaktes: ${zwaktes}`;
+
+    loadLesson(lessonId);
+}
+
+function getSlagenByLevel(level) {
+    const db = window.padelslagen || {
+        beginner: ["forehand", "backhand"],
+        intermediate: ["volley_forehand", "volley_backhand"],
+        advanced: ["bandeja", "vibora", "smash"]
+    };
+
+    return db[level] || db.beginner;
+}
+
+function pickBestSlag(slagen, zwaktes) {
+    if (!zwaktes) return slagen[0];
+
+    if (zwaktes.includes("achter")) return "backhand";
+    if (zwaktes.includes("net")) return "volley_forehand";
+    if (zwaktes.includes("kracht")) return "smash";
+
+    return slagen[Math.floor(Math.random() * slagen.length)];
+}
+
+/* =========================
+   DATE AUTO FILL
+========================= */
+
+function autoFillDates(startDate) {
+    let start = new Date(startDate);
+
+    state.lessons.forEach((lesson, i) => {
+        let d = new Date(start);
+        d.setDate(start.getDate() + (i * 7));
+
+        lesson.Datum = d.toISOString().split("T")[0];
+    });
+
+    loadLesson(currentLesson);
+}
+
+/* =========================
+   EXPORT JSON
+========================= */
+
+function exportJSON() {
     saveLesson();
-    let data=buildData();
-    download(JSON.stringify(data,null,2),"padel123.json");
+
+    const blob = new Blob([JSON.stringify(state, null, 2)], {
+        type: "application/json"
+    });
+
+    download(blob, "padel123_export.json");
 }
 
-function exportTXT(){
-    let data=buildData();
-    download(JSON.stringify(data,null,2),"padel123.txt");
-}
+/* =========================
+   IMPORT JSON / TXT
+========================= */
 
-function exportCSV(){
-    let data=buildData();
-    let rows=[];
+function importFile(event) {
+    const file = event.target.files[0];
+    if (!file) return;
 
-    for(let i=1;i<=12;i++){
-        let l=data.lessons[i]||{};
-        let row=[];
+    const reader = new FileReader();
 
-        fields.global.forEach(f=>row.push(data.global[f]||""));
-        fields.lesson.forEach(f=>row.push(l[f]||""));
+    reader.onload = function(e) {
+        try {
+            const data = JSON.parse(e.target.result);
 
-        rows.push(row.join(";"));
-    }
+            state = data;
 
-    download(rows.join("\n"),"padel123.csv");
-}
-
-// -------------------- IMPORT --------------------
-function importLesson(e){
-    let file=e.target.files[0];
-    let reader=new FileReader();
-
-    reader.onload=function(ev){
-        let txt=ev.target.result;
-        let data=JSON.parse(txt);
-
-        localStorage.clear();
-
-        if(data.global){
-            localStorage.setItem("global",JSON.stringify(data.global));
+            loadLesson(currentLesson);
+        } catch (err) {
+            alert("Invalid file format");
         }
-
-        for(let i=1;i<=12;i++){
-            localStorage.setItem("les_"+i,JSON.stringify(data.lessons?.[i]||{}));
-        }
-
-        loadLesson();
     };
 
     reader.readAsText(file);
 }
 
-// -------------------- DOWNLOAD --------------------
-function download(data,name){
-    let a=document.createElement("a");
-    a.href=URL.createObjectURL(new Blob([data]));
-    a.download=name;
+/* =========================
+   CSV EXPORT (FLAT)
+========================= */
+
+function exportCSV() {
+    saveLesson();
+
+    let headers = Object.keys(state.lessons[0]);
+
+    let rows = state.lessons.map(l =>
+        headers.map(h => `"${(l[h] || "").toString().replace(/"/g, '""')}"`).join(";")
+    );
+
+    let csv = headers.join(";") + "\n" + rows.join("\n");
+
+    download(new Blob([csv]), "padel123_export.csv");
+}
+
+/* =========================
+   DOWNLOAD HELPER
+========================= */
+
+function download(blob, name) {
+    let a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
     a.click();
 }
+
+/* =========================
+   GLOBAL UPDATE
+========================= */
+
+function updateGlobal() {
+    document.querySelectorAll("#global input").forEach(el => {
+        state.global[el.id] = el.value;
+    });
+
+    saveLesson();
+}
+
+/* =========================
+   INIT START
+========================= */
+
+init();
