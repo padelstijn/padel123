@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<title>Padel Les App</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>Padel Les Tool</h1>
+
+<div class="grid">
+
+<!-- BASIS -->
+<input id="trainer" placeholder="Trainer">
+<input id="datum" placeholder="Datum">
+<input id="lesweek" placeholder="Lesweek">
+<input id="tijd" placeholder="Tijd">
+<input id="lesduur" placeholder="Lesduur">
+<input id="locatie" placeholder="Locatie">
+<input id="lesgroep" placeholder="Lesgroep">
+<input id="niveau" placeholder="Niveau">
+
+<!-- SPELERS -->
+<textarea id="speler1" placeholder="Speler 1"></textarea>
+<textarea id="speler2" placeholder="Speler 2"></textarea>
+<textarea id="speler3" placeholder="Speler 3"></textarea>
+<textarea id="speler4" placeholder="Speler 4"></textarea>
+
+<textarea id="groep" placeholder="Groepsprofiel (AI)"></textarea>
+
+<!-- LES -->
+<input id="hoofdsituatie" placeholder="Hoofdspelsituatie">
+<input id="bedoeling" placeholder="Bedoeling">
+<input id="slag" placeholder="Slag">
+
+<textarea id="kernA" placeholder="Kern A doel"></textarea>
+<textarea id="kernB" placeholder="Kern B doel"></textarea>
+
+<textarea id="inleiding" placeholder="Inleiding"></textarea>
+<textarea id="kernA1" placeholder="Kern A1"></textarea>
+<textarea id="kernA2" placeholder="Kern A2"></textarea>
+<textarea id="kernB1" placeholder="Kern B"></textarea>
+
+<textarea id="slot" placeholder="Slot"></textarea>
+
+</div>
+
+<div class="buttons">
+<button onclick="genereerProfiel()">Genereer groepsprofiel</button>
+<button onclick="opslaan()">Opslaan</button>
+<button onclick="laden()">Laad laatste</button>
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
