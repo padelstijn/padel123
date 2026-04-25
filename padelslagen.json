@@ -1,0 +1,314 @@
+{
+  "forehand": {
+    "naam": "Forehand",
+    "doel": "Rally opbouwen met controle en richting, druk creëren",
+    "tactiek": "Basisrally achterin, opbouwen of versnellen, tegenstander verplaatsen",
+    "voorbereiding": [
+      "Split step",
+      "GRAS (Grip, Ready, Adjust, Split)",
+      "Racket vroeg achter en naast lichaam",
+      "Open stand → zijwaarts instappen",
+      "Door de knieën"
+    ],
+    "slagmoment": [
+      "Raakpunt vóór en naast lichaam",
+      "Na stuit spelen",
+      "Swing onder → boven en achter → voren",
+      "Gewichtsoverdracht naar voren"
+    ],
+    "eindpositie": [
+      "Doorzwaai naar voren",
+      "Balansarm vangt racket op",
+      "Herstel naar ready positie"
+    ],
+    "coaching_cues": [
+      "Laag blijven",
+      "Voor je raken",
+      "Stap in"
+    ],
+    "fouten": [
+      "Te laat raken",
+      "Geen kniebuiging",
+      "Alleen armgebruik"
+    ]
+  },
+
+  "backhand": {
+    "naam": "Backhand",
+    "doel": "Controle houden in rally en onder druk spelen",
+    "tactiek": "Backhandzijde, verdedigen of opbouwen",
+    "voorbereiding": [
+      "GRAS",
+      "Schouders indraaien",
+      "Zijwaartse stand"
+    ],
+    "slagmoment": [
+      "Voor lichaam raken",
+      "Compacte swing",
+      "Laag → hoog beweging"
+    ],
+    "eindpositie": [
+      "Doorzwaai",
+      "Herstel naar basispositie"
+    ],
+    "coaching_cues": [
+      "Schouder draaien",
+      "Voor je slaan"
+    ],
+    "fouten": [
+      "Te laat raken",
+      "Geen rotatie"
+    ]
+  },
+
+  "volley_forehand": {
+    "naam": "Volley Forehand",
+    "doel": "Punt afmaken en druk houden aan het net",
+    "tactiek": "Netspel, interceptie van snelle ballen",
+    "voorbereiding": [
+      "Korte backswing",
+      "Racket hoog voor lichaam"
+    ],
+    "slagmoment": [
+      "Blokkeren vóór lichaam",
+      "Minimale swing"
+    ],
+    "eindpositie": [
+      "Stap naar voren",
+      "Stabiel balans"
+    ],
+    "coaching_cues": [
+      "Blokkeren",
+      "Voor je houden"
+    ],
+    "fouten": [
+      "Te grote swing",
+      "Bal laten zakken"
+    ]
+  },
+
+  "volley_backhand": {
+    "naam": "Volley Backhand",
+    "doel": "Netdruk houden en punten afmaken",
+    "tactiek": "Snelle reactie aan het net",
+    "voorbereiding": [
+      "Racket hoog",
+      "Korte voorbereiding"
+    ],
+    "slagmoment": [
+      "Blokkeren",
+      "Compacte beweging"
+    ],
+    "eindpositie": [
+      "Stabiel blijven",
+      "Direct ready"
+    ],
+    "coaching_cues": [
+      "Kort houden",
+      "Voor lichaam"
+    ],
+    "fouten": [
+      "Te groot",
+      "Te laat"
+    ]
+  },
+
+  "bandeja": {
+    "naam": "Bandeja",
+    "doel": "Netpositie behouden en controleren",
+    "tactiek": "Vertragen en herpositioneren na lob",
+    "voorbereiding": [
+      "Zijwaarts draaien",
+      "Racket hoog"
+    ],
+    "slagmoment": [
+      "Slice beweging",
+      "Controle van boven naar voren"
+    ],
+    "eindpositie": [
+      "Terug naar net"
+    ],
+    "coaching_cues": [
+      "Rust en controle"
+    ],
+    "fouten": [
+      "Te hard slaan",
+      "Smash forceren"
+    ]
+  },
+
+  "vibora": {
+    "naam": "Vibora",
+    "doel": "Druk zetten met spin en snelheid",
+    "tactiek": "Aanvallend netspel na lob",
+    "voorbereiding": [
+      "Zijwaarts",
+      "Racket hoog"
+    ],
+    "slagmoment": [
+      "Snelle polsactie",
+      "Sidespin + slice"
+    ],
+    "eindpositie": [
+      "Doorstappen"
+    ],
+    "coaching_cues": [
+      "Snijden langs bal"
+    ],
+    "fouten": [
+      "Te vlak",
+      "Geen spin"
+    ]
+  },
+
+  "bajada": {
+    "naam": "Bajada",
+    "doel": "Aanvallen na lob en controle nemen",
+    "tactiek": "Overgang van verdediging naar aanval",
+    "voorbereiding": [
+      "Snel positioneren onder bal"
+    ],
+    "slagmoment": [
+      "Agressief naar voren spelen"
+    ],
+    "eindpositie": [
+      "Doorschakelen naar net"
+    ],
+    "coaching_cues": [
+      "Pak initiatief"
+    ],
+    "fouten": [
+      "Te passief"
+    ]
+  },
+
+  "smash": {
+    "naam": "Smash",
+    "doel": "Punt direct afmaken",
+    "tactiek": "Hoge bal afstraffen",
+    "voorbereiding": [
+      "Onder bal komen"
+    ],
+    "slagmoment": [
+      "Hoog raakpunt",
+      "Volle swing"
+    ],
+    "eindpositie": [
+      "Doorzwaai"
+    ],
+    "coaching_cues": [
+      "Hoog raken"
+    ],
+    "fouten": [
+      "Te laat",
+      "Onder bal blijven"
+    ]
+  },
+
+  "kicks smash": {
+    "naam": "Kicksmash",
+    "doel": "Bal via glas laten stuiteren",
+    "tactiek": "Spin en positioneel voordeel creëren",
+    "voorbereiding": [
+      "Achter bal positioneren"
+    ],
+    "slagmoment": [
+      "Onder → boven swing",
+      "Topspin geven"
+    ],
+    "eindpositie": [
+      "Herstellen"
+    ],
+    "coaching_cues": [
+      "Spin geven"
+    ],
+    "fouten": [
+      "Geen rotatie"
+    ]
+  },
+
+  "forehand_na_glas": {
+    "naam": "Forehand na glas",
+    "doel": "Verdedigen en opnieuw opbouwen",
+    "tactiek": "Rust bewaren na glascontact",
+    "voorbereiding": [
+      "Wachten op stuit na glas"
+    ],
+    "slagmoment": [
+      "Na glas + stuit spelen"
+    ],
+    "eindpositie": [
+      "Controle terug"
+    ],
+    "coaching_cues": [
+      "Geduld"
+    ],
+    "fouten": [
+      "Te vroeg slaan"
+    ]
+  },
+
+  "backhand_na_glas": {
+    "naam": "Backhand na glas",
+    "doel": "Verdedigen en herpositioneren",
+    "tactiek": "Controle houden onder druk",
+    "voorbereiding": [
+      "Wachten op glas"
+    ],
+    "slagmoment": [
+      "Na stuit spelen"
+    ],
+    "eindpositie": [
+      "Herstel"
+    ],
+    "coaching_cues": [
+      "Rust"
+    ],
+    "fouten": [
+      "Te vroeg"
+    ]
+  },
+
+  "rulo": {
+    "naam": "Rulo",
+    "doel": "Onvoorspelbare spinbal spelen",
+    "tactiek": "Creatief en verrassend",
+    "voorbereiding": [
+      "Compacte voorbereiding"
+    ],
+    "slagmoment": [
+      "Veel polsactie",
+      "Spin genereren"
+    ],
+    "eindpositie": [
+      "Herstellen"
+    ],
+    "coaching_cues": [
+      "Spin maken"
+    ],
+    "fouten": [
+      "Te wild"
+    ]
+  },
+
+  "gancho": {
+    "naam": "Gancho",
+    "doel": "Snelle verrassingsaanval",
+    "tactiek": "Onder druk korte oplossing",
+    "voorbereiding": [
+      "Compact houden"
+    ],
+    "slagmoment": [
+      "Snelle haakbeweging"
+    ],
+    "eindpositie": [
+      "Direct herstel"
+    ],
+    "coaching_cues": [
+      "Kort en snel"
+    ],
+    "fouten": [
+      "Te groot maken"
+    ]
+  }
+}
