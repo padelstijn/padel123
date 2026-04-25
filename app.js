@@ -1,127 +1,188 @@
 const TOTAL_LESSONS = 12;
 let currentLesson = 1;
 
-// 🔥 44 kolommen (basis + uitbreidbaar)
-const fields = [
-"Trainer","Datum","Tijd","Lesduur","Niveau",
-"Spelers_profiel1","Spelers_profiel2","Spelers_profiel3","Spelers_profiel4",
-"Spelers_groep",
-"AI_output"
-];
+// 🟦 44 kolommen (vereenvoudigd beheersbaar)
+const fields = {
+    global: [
+        "Trainer","Lesgroep","Lesduur","Niveau","Locatie","Notities_trainer"
+    ],
+    lesson: [
+        "Datum","Tijd","Lesweek",
+        "Spelers_profiel1","Spelers_profiel2","Spelers_profiel3","Spelers_profiel4",
+        "Spelers_groep",
+        "Inleiding_doel","Inleiding_oefenvorm",
+        "KernA_doel","KernA_oefenvorm","KernA_coaching",
+        "KernA2_doel","KernA2_oefenvorm","KernA2_coaching",
+        "KernB_doel_uitwerking","KernB_oefenvorm","KernB_coaching",
+        "Slot_spelvorm","Slot_regels",
+        "Evaluatie","Differentiatie",
+        "Slag","Bedoeling","Hoofdspelsituatie",
+        "AI_output"
+    ]
+};
 
-// 📌 Tabs
-function initTabs() {
-    const tabs = document.getElementById("tabs");
-    for (let i=1;i<=TOTAL_LESSONS;i++){
-        let b = document.createElement("button");
-        b.innerText = "Les " + i;
-        b.onclick = () => switchLesson(i);
-        tabs.appendChild(b);
-    }
+// 🧠 GLOBAL LOAD/SAVE
+function saveGlobal(){
+    let g = {};
+    fields.global.forEach(f=>{
+        let el = document.getElementById(f);
+        if(el) g[f] = el.value;
+    });
+    localStorage.setItem("global", JSON.stringify(g));
 }
 
-function switchLesson(nr){
-    saveLesson();
-    currentLesson = nr;
-    loadLesson();
+function loadGlobal(){
+    let g = JSON.parse(localStorage.getItem("global") || "{}");
+    fields.global.forEach(f=>{
+        let el = document.getElementById(f);
+        if(el) el.value = g[f] || "";
+    });
 }
 
-// 💾 save
+// 📚 LES LOAD/SAVE
 function saveLesson(){
     let data = {};
-    fields.forEach(f=>{
+    fields.lesson.forEach(f=>{
         let el = document.getElementById(f);
         if(el) data[f] = el.value;
     });
     localStorage.setItem("les_"+currentLesson, JSON.stringify(data));
 }
 
-// 📂 load
 function loadLesson(){
-    let data = JSON.parse(localStorage.getItem("les_"+currentLesson));
-    fields.forEach(f=>{
+    let data = JSON.parse(localStorage.getItem("les_"+currentLesson) || "{}");
+    fields.lesson.forEach(f=>{
         let el = document.getElementById(f);
-        if(el) el.value = data ? (data[f]||"") : "";
+        if(el) el.value = data[f] || "";
+    });
+
+    // 🔁 inject global defaults als leeg
+    let g = JSON.parse(localStorage.getItem("global") || "{}");
+    fields.global.forEach(f=>{
+        let el = document.getElementById(f);
+        if(el && !el.value) el.value = g[f] || "";
     });
 }
 
-// 📦 export ALL 12 lessen
+// 🔁 TABS
+function initTabs(){
+    const tabs = document.getElementById("tabs");
+    for(let i=1;i<=TOTAL_LESSONS;i++){
+        let b = document.createElement("button");
+        b.innerText = "Les "+i;
+        b.onclick = ()=>switchLesson(i);
+        tabs.appendChild(b);
+    }
+}
+
+function switchLesson(n){
+    saveLesson();
+    saveGlobal();
+    currentLesson = n;
+    loadLesson();
+}
+
+// 📦 EXPORT JSON (FULL SYSTEM)
 function exportAll(){
     saveLesson();
-    let all = {};
+    saveGlobal();
+
+    let all = {
+        global: JSON.parse(localStorage.getItem("global")||"{}"),
+        lessons: {}
+    };
+
     for(let i=1;i<=12;i++){
-        all[i] = JSON.parse(localStorage.getItem("les_"+i) || "{}");
+        all.lessons[i] = JSON.parse(localStorage.getItem("les_"+i)||"{}");
     }
-    let blob = new Blob([JSON.stringify(all)], {type:"text/plain"});
-    let a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "padel123_all_lessons.txt";
-    a.click();
+
+    download(JSON.stringify(all), "padel123_full.json");
 }
 
-// 📥 import ALL
+// 📊 EXPORT CSV (Excel 44 kolommen)
+function exportCSV(){
+    let csv = [];
+
+    for(let i=1;i<=12;i++){
+        let row = [];
+        let data = JSON.parse(localStorage.getItem("les_"+i)||"{}");
+
+        fields.global.forEach(f=>{
+            row.push((JSON.parse(localStorage.getItem("global")||"{}")[f]||""));
+        });
+
+        fields.lesson.forEach(f=>{
+            row.push(data[f]||"");
+        });
+
+        csv.push(row.join(";"));
+    }
+
+    download(csv.join("\n"), "padel123.csv");
+}
+
+// 📄 EXPORT TXT
+function exportTXT(){
+    exportAll();
+}
+
+// 📥 IMPORT FULL RESET
 function importAll(event){
-    let file = event.target.files[0];
     let r = new FileReader();
     r.onload = function(e){
-        let all = JSON.parse(e.target.result);
+        let data = JSON.parse(e.target.result);
+
+        localStorage.setItem("global", JSON.stringify(data.global||{}));
+
         for(let i=1;i<=12;i++){
-            if(all[i]){
-                localStorage.setItem("les_"+i, JSON.stringify(all[i]));
-            }
+            localStorage.setItem("les_"+i, JSON.stringify(data.lessons[i]||{}));
         }
+
+        loadGlobal();
         loadLesson();
     };
-    r.readAsText(file);
+    r.readAsText(event.target.files[0]);
 }
 
-// 🧠 AI LESGENERATOR V2
+// 🧠 AI koppeling (slagen + spelers)
 function generateAI(){
-
-    let spelers = [
+    let profiel = [
         document.getElementById("Spelers_profiel1").value,
-        document.getElementById("Spelers_profiel2").value,
-        document.getElementById("Spelers_profiel3").value,
-        document.getElementById("Spelers_profiel4").value
-    ].join(" | ");
+        document.getElementById("Spelers_profiel2").value
+    ].join(" ");
 
     fetch("padelslagen.json")
     .then(r=>r.json())
     .then(slagen=>{
+        let out = "";
 
-        let advies = "";
-
-        // simpele AI logica
-        if(spelers.includes("beginner")){
-            advies += "Focus op forehand + backhand basics + laag blijven\n";
-            advies += "→ GRAS principe toepassen\n";
+        if(profiel.includes("beginner")){
+            out += "Focus: forehand, backhand, GRAS, lage bal\n";
         }
 
-        if(spelers.includes("gevorderd")){
-            advies += "Volley + bandeja + positioneel spel\n";
+        if(profiel.includes("gevorderd")){
+            out += "Focus: volley, bandeja, positioneel spel\n";
         }
 
-        // koppeling met slagen DB
-        slagen.slice(0,3).forEach(s=>{
-            advies += "\n🎾 " + s.slag + ": " + s.doel;
+        slagen.forEach(s=>{
+            out += "\n🎾 "+s.slag+": "+s.doel;
         });
 
-        document.getElementById("AI_output").value = advies;
-
+        document.getElementById("AI_output").value = out;
         saveLesson();
     });
 }
 
-// 📡 GOOGLE SHEETS SYNC (publiek sheet)
-function syncSheets(){
-    fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vRrKAyjEBXwq-UvZFpRj9-oI0X0gwJQRMGih-eIKNUfREeme-UtsL375pC0jBi7mg/pub?output=json")
-    .then(r=>r.text())
-    .then(data=>{
-        console.log("Sheets data:", data);
-        alert("Sheets geladen (check console)");
-    });
+// helper
+function download(data,name){
+    let b = new Blob([data],{type:"text/plain"});
+    let a = document.createElement("a");
+    a.href = URL.createObjectURL(b);
+    a.download = name;
+    a.click();
 }
 
 // start
 initTabs();
+loadGlobal();
 loadLesson();
