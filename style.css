@@ -1,31 +1,19 @@
 body {
     font-family: Arial;
-    margin: 20px;
+    padding: 20px;
 }
 
-.grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+#tabs button {
+    margin: 3px;
+    padding: 8px;
 }
 
-textarea {
-    height: 80px;
+.controls {
+    margin: 10px 0;
 }
 
 input, textarea {
-    padding: 8px;
-    width: 100%;
-}
-
-.buttons {
-    margin-top: 20px;
-}
-
-button {
-    padding: 10px;
-    margin-right: 10px;
-    background: black;
-    color: white;
-    border: none;
+    display: block;
+    margin-bottom: 10px;
+    width: 300px;
 }
