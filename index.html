@@ -1,114 +1,36 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Padel123 Coach AI v4</title>
-
-<link rel="stylesheet" href="style.css">
-
-<style>
-body {
-    font-family: Arial;
-    background: #f4f4f4;
-    padding: 20px;
-}
-
-h1 { margin-bottom: 10px; }
-
-#tabs button {
-    margin: 3px;
-    padding: 8px;
-    border: 0;
-    background: #ddd;
-    cursor: pointer;
-}
-
-#tabs button:hover { background: #bbb; }
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-}
-
-input, textarea {
-    width: 100%;
-    padding: 6px;
-}
-
-textarea { min-height: 70px; }
-
-.panel {
-    background: white;
-    padding: 15px;
-    margin-top: 10px;
-    border-radius: 8px;
-}
-
-.controls button {
-    margin-right: 5px;
-}
-</style>
+  <meta charset="UTF-8">
+  <title>Padel Coach v5</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<h1>🎾 Padel123 Coach AI v4</h1>
+<h1>🎾 Padel Coach v5</h1>
+
+<div id="topbar">
+  <button onclick="saveGlobal()">💾 Save Global</button>
+  <button onclick="exportJSON()">JSON</button>
+  <button onclick="exportCSV()">CSV</button>
+  <button onclick="exportTXT()">TXT</button>
+  <input type="file" onchange="importFile(event)">
+</div>
 
 <div id="tabs"></div>
 
-<div class="controls">
-    <button onclick="saveLesson()">💾 Save</button>
-    <button onclick="exportJSON()">⬇ JSON</button>
-    <button onclick="exportCSV()">📊 CSV</button>
-    <input type="file" onchange="importFile(event)">
+<div id="global">
+  <h2>Global Coach Settings</h2>
+  <input id="Trainer" placeholder="Trainer">
+  <input id="Lesgroep" placeholder="Lesgroep">
+  <input id="Lesduur" placeholder="Lesduur">
 </div>
 
-<div class="panel">
+<hr>
 
-<div class="grid" id="form">
+<div id="form"></div>
 
-<input id="Trainer" placeholder="Trainer">
-<input id="Datum" type="date">
-<input id="Lesweek">
-<input id="Tijd">
-
-<input id="Lesduur">
-<input id="Locatie">
-<input id="Lesgroep">
-<input id="Niveau">
-
-<textarea id="Spelers_groep" placeholder="Groep"></textarea>
-
-<input id="Spelers_profiel1">
-<input id="Spelers_profiel2">
-<input id="Spelers_profiel3">
-<input id="Spelers_profiel4">
-
-<textarea id="Beginsituatie_algemeen"></textarea>
-<textarea id="Technische_zwaktes"></textarea>
-<textarea id="Tactische_zwaktes"></textarea>
-<textarea id="Hoofdspelsituatie"></textarea>
-
-<input id="Slag">
-<input id="Bedoeling">
-
-<textarea id="KernA_doel"></textarea>
-<textarea id="KernB_doel"></textarea>
-
-<textarea id="Evaluatie"></textarea>
-
-<textarea id="AI_output"></textarea>
-
-</div>
-
-</div>
-
-<button onclick="runAI(currentLesson)">🧠 AI Genereer Les</button>
-<button onclick="autoFillDates(prompt('Start datum (YYYY-MM-DD)'))">📅 Auto 12 weken</button>
-
-<script src="padelslagen.json"></script>
+<script src="db.js"></script>
 <script src="app.js"></script>
 
 </body>
