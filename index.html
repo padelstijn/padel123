@@ -1,35 +1,54 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Padel123 AI Coach LIVE</title>
-
-<style>
-body { font-family: Arial; padding: 20px; background:#f4f4f4; }
-#tabs button { margin:3px; padding:8px; }
-.controls button { margin:5px; padding:8px; }
-#form { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-input, textarea { padding:6px; }
-textarea { min-height:60px; }
-</style>
+    <meta charset="UTF-8">
+    <title>padel123</title>
+    <style>
+        body { font-family: Arial; margin: 10px; }
+        .tabs button { margin: 2px; padding: 5px; }
+        textarea, input, select { width: 100%; margin: 3px 0; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    </style>
 </head>
-
 <body>
 
-<h1>🎾 Padel123 LIVE Coach</h1>
+<h1>🎾 padel123 AI Lesson Builder v2</h1>
 
-<div id="tabs"></div>
+<div class="tabs" id="tabs"></div>
 
-<div class="controls">
-<button onclick="saveLesson()">💾 Save</button>
-<button onclick="exportToGoogle()">☁ Push to Google</button>
-<button onclick="loadFromGoogle()">🔄 Pull from Google</button>
-<button onclick="exportToFile()">⬇ Export JSON</button>
-<input type="file" onchange="importFile(event)">
+<hr>
+
+<button onclick="exportAll()">📦 Export 12 lessen</button>
+<input type="file" onchange="importAll(event)">
+
+<button onclick="generateAI()">🧠 AI lesgenerator</button>
+
+<button onclick="syncSheets()">📡 Sync Google Sheets</button>
+
+<div class="grid">
+
+    <div>
+        <h3>Basis info</h3>
+        <input id="Trainer" placeholder="Trainer">
+        <input id="Datum" type="date">
+        <input id="Tijd" type="time">
+        <input id="Lesduur" placeholder="Lesduur">
+        <input id="Niveau" placeholder="Niveau">
+    </div>
+
+    <div>
+        <h3>Groep</h3>
+        <input id="Spelers_profiel1">
+        <input id="Spelers_profiel2">
+        <input id="Spelers_profiel3">
+        <input id="Spelers_profiel4">
+        <textarea id="Spelers_groep"></textarea>
+    </div>
+
 </div>
 
-<div id="form"></div>
+<h3>AI output</h3>
+<textarea id="AI_output" rows="10"></textarea>
 
 <script src="app.js"></script>
 
