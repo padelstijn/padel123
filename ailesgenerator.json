@@ -1,22 +1,63 @@
 {
-  {
-  "rules": {
-    "beginner": ["forehand","backhand"],
-    "intermediate": ["volley_forehand","volley_backhand"],
-    "advanced": ["bandeja","vibora","smash"]
+  "ai_rules": {
+    "beginner": ["forehand", "backhand"],
+    "intermediate": ["volley_forehand", "volley_backhand", "bajada"],
+    "advanced": ["bandeja", "vibora", "smash", "kicksmash"]
   },
-  "logic": "select_slag_based_on_zwaktes_and_spelsituatie"
-}
-  "les": 1,
-  "niveau": "beginner",
-  "focus": "voorkant spel (forehand)",
-  "slagen": ["forehand basic"],
-  "doel": "balcontrole en basis techniek",
-  "opbouw": {
-    "warming_up": "...",
-    "techniek": "...",
-    "oefening": "...",
-    "spelvorm": "..."
+
+  "logic": {
+    "selection": "based_on_technical_weakness_and_game_situation",
+    "priority": [
+      "techniek",
+      "positioning",
+      "decision_making",
+      "tempo_control"
+    ]
   },
-  "progressie": "volgende les introduceert volley"
+
+  "lesson_template": {
+    "focus": "",
+    "goal": "",
+    "selected_slagen": [],
+
+    "structure": {
+      "warming_up": {
+        "goal": "activatie + balgevoel",
+        "method": "herhaling + simpele rally"
+      },
+
+      "technique_block": {
+        "goal": "1 technische sleutel",
+        "cues": [
+          "laag door knieën",
+          "continental grip",
+          "raakpunt voor lichaam",
+          "gewicht naar voren"
+        ]
+      },
+
+      "practice_block": {
+        "goal": "herkennen + uitvoeren",
+        "constraints": "keuze tussen richting of tempo"
+      },
+
+      "game_block": {
+        "goal": "beslissingen onder druk",
+        "rules": "punten voor juiste keuze"
+      }
+    },
+
+    "progression_rule": {
+      "next_lesson": "introduce_next_slag_based_on_control_level"
+    }
+  },
+
+  "example_output": {
+    "les": 1,
+    "niveau": "beginner",
+    "focus": "forehand basis",
+    "slagen": ["forehand"],
+    "doel": "balcontrole en basis techniek",
+    "progressie": "volgende les introduceert backhand of volley afhankelijk van controle"
+  }
 }
