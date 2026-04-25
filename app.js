@@ -1,259 +1,155 @@
-const TOTAL_LESSONS = 12;
-
 let state = {
-    global: {},
-    defaults: {},
-    lessons: []
+  lessons: [],
+  global: {}
 };
 
 let currentLesson = 1;
 
-/* =========================
-   INIT
-========================= */
+init();
 
 async function init() {
-    await loadDataLayer();
-    initTabs();
-    loadLesson(1);
+  await openDB();
+
+  let dbLessons = await getAllLessons();
+  let dbGlobal = await getGlobalDB();
+
+  state.global = dbGlobal;
+
+  // FORCE 12 LESSONS
+  state.lessons = Array.from({ length: 12 }, (_, i) => {
+    let found = dbLessons.find(l => l.id === i + 1);
+    return found || { id: i + 1 };
+  });
+
+  loadGlobal();
+  renderTabs();
+  loadLesson(1);
 }
 
-/* =========================
-   LOAD DATALAYER
-========================= */
+/* ---------------- GLOBAL ---------------- */
 
-async function loadDataLayer() {
-    try {
-        const res = await fetch("datalayer.json");
-        const data = await res.json();
-
-        state.global = data.global || {};
-        state.defaults = data.defaults || {};
-
-        state.lessons = data.lessons || generateEmptyLessons();
-
-    } catch (e) {
-        console.warn("No datalayer found, using fallback");
-        state.lessons = generateEmptyLessons();
+function loadGlobal() {
+  for (let k in state.global) {
+    if (document.getElementById(k)) {
+      document.getElementById(k).value = state.global[k];
     }
+  }
 }
 
-function generateEmptyLessons() {
-    let arr = [];
-    for (let i = 1; i <= TOTAL_LESSONS; i++) {
-        arr.push({
-            id: i,
-            Datum: "",
-            Lesweek: i,
-            Tijd: "09:00",
-            AI_output: ""
-        });
-    }
-    return arr;
+function saveGlobal() {
+  document.querySelectorAll("#global input").forEach(i => {
+    state.global[i.id] = i.value;
+  });
+
+  saveGlobalDB(state.global);
 }
 
-/* =========================
-   TABS
-========================= */
-
-function initTabs() {
-    const tabs = document.getElementById("tabs");
-    tabs.innerHTML = "";
-
-    for (let i = 1; i <= TOTAL_LESSONS; i++) {
-        let btn = document.createElement("button");
-        btn.innerText = "Les " + i;
-        btn.onclick = () => switchLesson(i);
-        tabs.appendChild(btn);
-    }
-}
-
-function switchLesson(id) {
-    saveLesson();
-    currentLesson = id;
-    loadLesson(id);
-}
-
-/* =========================
-   LOAD LESSON
-========================= */
+/* ---------------- LESSON ---------------- */
 
 function loadLesson(id) {
-    const lesson = state.lessons.find(l => l.id === id);
+  currentLesson = id;
+  let lesson = state.lessons.find(l => l.id === id);
 
-    if (!lesson) return;
+  let form = document.getElementById("form");
+  form.innerHTML = "";
 
-    // merge global + lesson + defaults
-    const merged = {
-        ...state.global,
-        ...state.defaults,
-        ...lesson
-    };
+  for (let key in lesson) {
+    if (key === "id") continue;
 
-    for (let key in merged) {
-        let el = document.getElementById(key);
-        if (el) el.value = merged[key] || "";
-    }
+    form.innerHTML += `
+      <label>${key}</label>
+      <textarea id="${key}">${lesson[key] || ""}</textarea>
+    `;
+  }
 }
-
-/* =========================
-   SAVE LESSON
-========================= */
 
 function saveLesson() {
-    let lesson = state.lessons.find(l => l.id === currentLesson);
-    if (!lesson) return;
+  let lesson = state.lessons.find(l => l.id === currentLesson);
 
-    document.querySelectorAll("#form input, #form textarea").forEach(el => {
-        lesson[el.id] = el.value;
-    });
+  document.querySelectorAll("#form textarea").forEach(t => {
+    lesson[t.id] = t.value;
+  });
 
-    localStorage.setItem("padel123_state", JSON.stringify(state));
+  saveLessonDB(lesson);
 }
 
-/* =========================
-   AI ENGINE
-========================= */
+/* ---------------- TABS ---------------- */
 
-function runAI(lessonId) {
-    const lesson = state.lessons.find(l => l.id === lessonId);
-    if (!lesson) return;
+function renderTabs() {
+  let tabs = document.getElementById("tabs");
+  tabs.innerHTML = "";
 
-    let niveau = state.global.Niveau || "beginner";
-    let zwaktes = lesson.Technische_zwaktes || "";
-
-    let slagen = getSlagenByLevel(niveau);
-
-    let gekozenSlag = pickBestSlag(slagen, zwaktes);
-
-    lesson.Slag = gekozenSlag;
-
-    lesson.AI_output =
-        `AI: focus op ${gekozenSlag} voor niveau ${niveau}. ` +
-        `Gebaseerd op zwaktes: ${zwaktes}`;
-
-    loadLesson(lessonId);
+  state.lessons.forEach(l => {
+    tabs.innerHTML += `<button onclick="loadLesson(${l.id});saveLesson()">
+      Les ${l.id}
+    </button>`;
+  });
 }
 
-function getSlagenByLevel(level) {
-    const db = window.padelslagen || {
-        beginner: ["forehand", "backhand"],
-        intermediate: ["volley_forehand", "volley_backhand"],
-        advanced: ["bandeja", "vibora", "smash"]
-    };
-
-    return db[level] || db.beginner;
-}
-
-function pickBestSlag(slagen, zwaktes) {
-    if (!zwaktes) return slagen[0];
-
-    if (zwaktes.includes("achter")) return "backhand";
-    if (zwaktes.includes("net")) return "volley_forehand";
-    if (zwaktes.includes("kracht")) return "smash";
-
-    return slagen[Math.floor(Math.random() * slagen.length)];
-}
-
-/* =========================
-   DATE AUTO FILL
-========================= */
-
-function autoFillDates(startDate) {
-    let start = new Date(startDate);
-
-    state.lessons.forEach((lesson, i) => {
-        let d = new Date(start);
-        d.setDate(start.getDate() + (i * 7));
-
-        lesson.Datum = d.toISOString().split("T")[0];
-    });
-
-    loadLesson(currentLesson);
-}
-
-/* =========================
-   EXPORT JSON
-========================= */
+/* ---------------- EXPORT ---------------- */
 
 function exportJSON() {
-    saveLesson();
+  saveLesson();
 
-    const blob = new Blob([JSON.stringify(state, null, 2)], {
-        type: "application/json"
-    });
+  let data = {
+    global: state.global,
+    lessen: state.lessons
+  };
 
-    download(blob, "padel123_export.json");
+  download(JSON.stringify(data, null, 2), "padel_v5.json");
 }
-
-/* =========================
-   IMPORT JSON / TXT
-========================= */
-
-function importFile(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-
-    reader.onload = function(e) {
-        try {
-            const data = JSON.parse(e.target.result);
-
-            state = data;
-
-            loadLesson(currentLesson);
-        } catch (err) {
-            alert("Invalid file format");
-        }
-    };
-
-    reader.readAsText(file);
-}
-
-/* =========================
-   CSV EXPORT (FLAT)
-========================= */
 
 function exportCSV() {
-    saveLesson();
+  saveLesson();
 
-    let headers = Object.keys(state.lessons[0]);
+  let keys = new Set();
+  state.lessons.forEach(l => Object.keys(l).forEach(k => keys.add(k)));
 
-    let rows = state.lessons.map(l =>
-        headers.map(h => `"${(l[h] || "").toString().replace(/"/g, '""')}"`).join(";")
-    );
+  let headers = [...keys];
 
-    let csv = headers.join(";") + "\n" + rows.join("\n");
+  let rows = state.lessons.map(l =>
+    headers.map(h => `"${l[h] || ""}"`).join(";")
+  );
 
-    download(new Blob([csv]), "padel123_export.csv");
+  download(headers.join(";") + "\n" + rows.join("\n"), "padel_v5.csv");
 }
 
-/* =========================
-   DOWNLOAD HELPER
-========================= */
+function exportTXT() {
+  saveLesson();
 
-function download(blob, name) {
-    let a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = name;
-    a.click();
+  let txt = state.lessons.map(l =>
+    Object.entries(l).map(([k,v]) => `${k}: ${v}`).join("\n")
+  ).join("\n\n-----\n\n");
+
+  download(txt, "padel_v5.txt");
 }
 
-/* =========================
-   GLOBAL UPDATE
-========================= */
+function download(data, name) {
+  let a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([data]));
+  a.download = name;
+  a.click();
+}
 
-function updateGlobal() {
-    document.querySelectorAll("#global input").forEach(el => {
-        state.global[el.id] = el.value;
+/* ---------------- IMPORT ---------------- */
+
+function importFile(e) {
+  let file = e.target.files[0];
+
+  let reader = new FileReader();
+
+  reader.onload = async (ev) => {
+    let data = JSON.parse(ev.target.result);
+
+    state.global = data.global || {};
+
+    state.lessons = Array.from({ length: 12 }, (_, i) => {
+      return data.lessen.find(l => l.id === i + 1) || { id: i + 1 };
     });
 
-    saveLesson();
+    renderTabs();
+    loadLesson(1);
+  };
+
+  reader.readAsText(file);
 }
-
-/* =========================
-   INIT START
-========================= */
-
-init();
