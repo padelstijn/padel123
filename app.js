@@ -1,127 +1,127 @@
 const TOTAL_LESSONS = 12;
 let currentLesson = 1;
 
-// Velden (later uitbreidbaar naar 44)
+// 🔥 44 kolommen (basis + uitbreidbaar)
 const fields = [
-    "Trainer","Datum","Niveau",
-    "Spelers_profiel1","Spelers_profiel2","Spelers_profiel3","Spelers_profiel4",
-    "Spelers_groep",
-    "Slag","Bedoeling","KernA_doel","KernB_doel"
+"Trainer","Datum","Tijd","Lesduur","Niveau",
+"Spelers_profiel1","Spelers_profiel2","Spelers_profiel3","Spelers_profiel4",
+"Spelers_groep",
+"AI_output"
 ];
 
-// 📊 Slagen database
-let slagDatabase = {};
-
-// -------------------- TABS --------------------
+// 📌 Tabs
 function initTabs() {
-    const tabsDiv = document.getElementById("tabs");
-
-    for (let i = 1; i <= TOTAL_LESSONS; i++) {
-        let btn = document.createElement("button");
-        btn.innerText = "Les " + i;
-        btn.onclick = () => switchLesson(i);
-        tabsDiv.appendChild(btn);
+    const tabs = document.getElementById("tabs");
+    for (let i=1;i<=TOTAL_LESSONS;i++){
+        let b = document.createElement("button");
+        b.innerText = "Les " + i;
+        b.onclick = () => switchLesson(i);
+        tabs.appendChild(b);
     }
 }
 
-function switchLesson(nr) {
+function switchLesson(nr){
     saveLesson();
     currentLesson = nr;
     loadLesson();
 }
 
-// -------------------- SAVE / LOAD --------------------
-function saveLesson() {
+// 💾 save
+function saveLesson(){
     let data = {};
-    fields.forEach(f => {
+    fields.forEach(f=>{
         let el = document.getElementById(f);
-        if (el) data[f] = el.value;
+        if(el) data[f] = el.value;
     });
-
-    localStorage.setItem("les_" + currentLesson, JSON.stringify(data));
+    localStorage.setItem("les_"+currentLesson, JSON.stringify(data));
 }
 
-function loadLesson() {
-    let data = JSON.parse(localStorage.getItem("les_" + currentLesson));
-
-    fields.forEach(f => {
+// 📂 load
+function loadLesson(){
+    let data = JSON.parse(localStorage.getItem("les_"+currentLesson));
+    fields.forEach(f=>{
         let el = document.getElementById(f);
-        if (el) el.value = data ? (data[f] || "") : "";
+        if(el) el.value = data ? (data[f]||"") : "";
     });
 }
 
-// -------------------- EXPORT / IMPORT --------------------
-function exportLesson() {
+// 📦 export ALL 12 lessen
+function exportAll(){
     saveLesson();
-
-    let data = localStorage.getItem("les_" + currentLesson);
-    let blob = new Blob([data], { type: "text/plain" });
-
+    let all = {};
+    for(let i=1;i<=12;i++){
+        all[i] = JSON.parse(localStorage.getItem("les_"+i) || "{}");
+    }
+    let blob = new Blob([JSON.stringify(all)], {type:"text/plain"});
     let a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = `les_${currentLesson}.txt`;
+    a.download = "padel123_all_lessons.txt";
     a.click();
 }
 
-function importLesson(event) {
+// 📥 import ALL
+function importAll(event){
     let file = event.target.files[0];
-    if (!file) return;
-
-    let reader = new FileReader();
-    reader.onload = function(e) {
-        let data = JSON.parse(e.target.result);
-
-        localStorage.setItem("les_" + currentLesson, JSON.stringify(data));
+    let r = new FileReader();
+    r.onload = function(e){
+        let all = JSON.parse(e.target.result);
+        for(let i=1;i<=12;i++){
+            if(all[i]){
+                localStorage.setItem("les_"+i, JSON.stringify(all[i]));
+            }
+        }
         loadLesson();
     };
-
-    reader.readAsText(file);
+    r.readAsText(file);
 }
 
-// -------------------- SLAGEN (GITHUB) --------------------
-async function loadSlagen() {
-    const url = "https://raw.githubusercontent.com/padelstijn/padel123/main/padelslagen.json";
+// 🧠 AI LESGENERATOR V2
+function generateAI(){
 
-    const response = await fetch(url);
-    slagDatabase = await response.json();
+    let spelers = [
+        document.getElementById("Spelers_profiel1").value,
+        document.getElementById("Spelers_profiel2").value,
+        document.getElementById("Spelers_profiel3").value,
+        document.getElementById("Spelers_profiel4").value
+    ].join(" | ");
 
-    populateSlagDropdown();
-}
+    fetch("padelslagen.json")
+    .then(r=>r.json())
+    .then(slagen=>{
 
-function populateSlagDropdown() {
-    const select = document.getElementById("slagSelect");
+        let advies = "";
 
-    select.innerHTML = '<option value="">-- kies slag --</option>';
+        // simpele AI logica
+        if(spelers.includes("beginner")){
+            advies += "Focus op forehand + backhand basics + laag blijven\n";
+            advies += "→ GRAS principe toepassen\n";
+        }
 
-    Object.keys(slagDatabase).forEach(slag => {
-        let option = document.createElement("option");
-        option.value = slag;
-        option.textContent = slag;
-        select.appendChild(option);
+        if(spelers.includes("gevorderd")){
+            advies += "Volley + bandeja + positioneel spel\n";
+        }
+
+        // koppeling met slagen DB
+        slagen.slice(0,3).forEach(s=>{
+            advies += "\n🎾 " + s.slag + ": " + s.doel;
+        });
+
+        document.getElementById("AI_output").value = advies;
+
+        saveLesson();
     });
 }
 
-function fillSlagData() {
-    const slag = document.getElementById("slagSelect").value;
-    if (!slagDatabase[slag]) return;
-
-    const data = slagDatabase[slag];
-
-    document.getElementById("Slag").value = slag;
-    document.getElementById("Bedoeling").value = data.doel || "";
-    document.getElementById("KernB_doel").value = data.tactiek || "";
-
-    if (data.techniek) {
-        document.getElementById("KernA_doel").value =
-            `Voorbereiding: ${data.techniek.voorbereiding}
-Slagmoment: ${data.techniek.slagmoment}
-Eindpositie: ${data.techniek.eindpositie}`;
-    }
+// 📡 GOOGLE SHEETS SYNC (publiek sheet)
+function syncSheets(){
+    fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vRrKAyjEBXwq-UvZFpRj9-oI0X0gwJQRMGih-eIKNUfREeme-UtsL375pC0jBi7mg/pub?output=json")
+    .then(r=>r.text())
+    .then(data=>{
+        console.log("Sheets data:", data);
+        alert("Sheets geladen (check console)");
+    });
 }
 
-// -------------------- START --------------------
-window.onload = function () {
-    initTabs();
-    loadLesson();
-    loadSlagen();
-};
+// start
+initTabs();
+loadLesson();
